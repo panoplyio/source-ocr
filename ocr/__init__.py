@@ -33,7 +33,7 @@ CONFIG = {
             'required': True
         }
     ],
-    'categories': [ 'API' ],
+    'categories': [ 'APIS' ],
     'keywords': [ 'API', 'ocr', 'one', 'click', 'retail' ],
     'createdAt': '2017-02-19'
 }
