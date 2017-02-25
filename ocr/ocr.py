@@ -8,7 +8,7 @@ import panoply
 BASE_URL = 'https://api.oneclickretail.com'
 DESTINATION = 'ocr_reports_csv'
 IDPATTERN = '{week_asin}'
-BATCH_SIZE = 20
+BATCH_SIZE = 200
 FETCH_META = False
 DEFAULT_WEEKS = 1
 DATE_FORMAT = '%Y-%m-%d'
