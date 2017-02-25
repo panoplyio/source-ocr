@@ -1,3 +1,4 @@
+import urllib
 import urllib2
 import csv
 from tempfile import SpooledTemporaryFile
@@ -104,12 +105,13 @@ class OcrSource(panoply.DataSource):
         return reader
 
     def _build_qs(self):
-        qs = 'meta=%(meta)s&X-API-KEY=%(key)s&weeks_back=%(weeks)s' % {
+        params = {
             'meta': FETCH_META,
-            'key': self.api_key,
-            'weeks': self.weeks,
-            'start_date': self.last_run
+            'X-API-KEY': self.api_key,
+            'weeks_back': self.weeks
         }
+
+        qs = urllib.urlencode(params)
         return qs
 
     def _build_url(self, qs):
