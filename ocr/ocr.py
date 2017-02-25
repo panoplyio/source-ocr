@@ -96,7 +96,10 @@ class OcrSource(panoply.DataSource):
         Assemble the api call, execute it and parse the
         csv response as a list of dicts
         """
-        self.log('Fetching data for %s' % resource['name'])
+
+        progress_msg = 'Fetching data for %s' % resource.get('name')
+        self.progress(None, None, progress_msg)
+
         qs = self._build_qs() # Build the query string
         url = self._build_url(qs) # Build the full url
         fp = self._api_call(url) # Fetch the data as a file pointer
