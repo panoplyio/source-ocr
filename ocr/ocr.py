@@ -130,12 +130,19 @@ class OcrSource(panoply.DataSource):
         stored in memory but once its size exceedes max_size it will start
         writing to disk. It is used because there is no way of knowing how
         large of a file the api will return.
+        We are expecting a csv file.
         """
         response = urllib2.urlopen(url)
+
+        # the response MUST be a csv file
+        content_type = response.info().get('content-type')
+        if 'csv' not in content_type:
+            raise Exception('ERROR - Non CSV response.')
+
         self.tmp_file = SpooledTemporaryFile(
             max_size = MAX_SIZE
         )
-        self.tmp_file.write( response.read() )
+        self.tmp_file.write(response.read())
         # 'rewind' the file pointer in order to
         # read it back durring `_extract_batch()`
         self.tmp_file.seek(0)
