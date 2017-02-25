@@ -10,7 +10,7 @@ DESTINATION = 'ocr_reports_csv'
 IDPATTERN = '{week_asin}'
 BATCH_SIZE = 200
 FETCH_META = False
-DEFAULT_WEEKS = 1
+DEFAULT_WEEKS_BACK = 1
 DATE_FORMAT = '%Y-%m-%d'
 MAX_SIZE = 104857600  # 100mb
 
@@ -27,7 +27,6 @@ class OcrSource(panoply.DataSource):
     resource = None
     tmp_file = None
     data = []
-    last_run = None
 
     api_key = None
     weeks = None
@@ -47,10 +46,8 @@ class OcrSource(panoply.DataSource):
 
         self.resources = source.get('resources')
         self.api_key = source.get('apiKey')
-        self.weeks = source.get('weeks', DEFAULT_WEEKS)
+        self.weeks = source.get('weeks', DEFAULT_WEEKS_BACK)
         self.clientUUID = source.get('clientUUID')
-
-        self.last_run = self._get_last_run(source.get('lastTimeSucceed'))
 
     def read(self):
         try:
@@ -148,14 +145,3 @@ class OcrSource(panoply.DataSource):
         self.tmp_file.seek(0)
 
         return self.tmp_file
-
-    def _get_last_run(self, ts_string = None):
-        """
-        Converts ts_string (ISO) to correct format if proivded.
-        If not provided, use todays date
-        """
-        last_run = date.today().strftime(DATE_FORMAT)
-        if ts_string:
-            last_run = ts_string[:ts_string.index('T')]
-
-        return last_run
