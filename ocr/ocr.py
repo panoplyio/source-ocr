@@ -126,7 +126,7 @@ class OcrSource(panoply.DataSource):
 
     def _api_call(self, url):
         """
-        Uses a SpooledTemporaryFile - this is a file that is initially
+        Returns a SpooledTemporaryFile - this is a file that is initially
         stored in memory but once its size exceedes max_size it will start
         writing to disk. It is used because there is no way of knowing how
         large of a file the api will return.
