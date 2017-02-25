@@ -22,7 +22,7 @@ CONFIG = {
             'name': 'resources',
             'title': 'Resources',
             'type': 'list',
-            'values': [{ 'title': 'reports csv', 'value': 'v3/clients/%s/reports/csv' }],
+            'values': [{ 'name': 'reports csv', 'value': 'v3/clients/%s/reports/csv' }],
             'dependencies': [ 'clientUUID', 'apiKey' ],
             'required': True
         }
