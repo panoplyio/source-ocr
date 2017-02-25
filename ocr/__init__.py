@@ -19,12 +19,6 @@ CONFIG = {
             'required': True
         },
         {
-            'name': 'weeks',
-            'title': 'Weeks back',
-            'placeholder': 'Weeks of data to fetch',
-            'required': False
-        },
-        {
             'name': 'resources',
             'title': 'Resources',
             'type': 'list',
