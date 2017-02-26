@@ -98,10 +98,10 @@ class OcrSource(panoply.DataSource):
         progress_msg = 'Fetching data for %s' % resource.get('name')
         self.progress(None, None, progress_msg)
 
-        qs = self._build_qs() # Build the query string
-        url = self._build_url(qs) # Build the full url
-        fp = self._api_call(url) # Fetch the data as a file pointer
-        reader = csv.DictReader(fp) # Parse the csv file to a dict generator
+        qs = self._build_qs()  # Build the query string
+        url = self._build_url(qs)  # Build the full url
+        fp = self._api_call(url)  # Fetch the data as a file pointer
+        reader = csv.DictReader(fp)  # Parse the csv file to a dict generator
         return reader
 
     def _build_qs(self):
@@ -138,9 +138,7 @@ class OcrSource(panoply.DataSource):
         if 'csv' not in content_type:
             raise Exception('ERROR - Non CSV response.')
 
-        self.tmp_file = SpooledTemporaryFile(
-            max_size = MAX_SIZE
-        )
+        self.tmp_file = SpooledTemporaryFile(max_size=MAX_SIZE)
         self.tmp_file.write(response.read())
         # 'rewind' the file pointer in order to
         # read it back durring `_extract_batch()`
