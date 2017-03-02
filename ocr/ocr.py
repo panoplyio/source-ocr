@@ -75,20 +75,6 @@ class OcrSource(panoply.DataSource):
 
         return batch
 
-    def _extract_batch(self, data):
-        """
-        Iterates over BATCH_SIZE of data
-        returning a list or results
-        """
-        batch = []
-        try:
-            for i in range(BATCH_SIZE):
-                batch.append(data.next())
-        except StopIteration:
-            pass
-
-        return batch
-
     def _fetch_resource(self, resource):
         """
         Assemble the api call, execute it and parse the
@@ -145,3 +131,18 @@ class OcrSource(panoply.DataSource):
         self.tmp_file.seek(0)
 
         return self.tmp_file
+
+    def _extract_batch(self, data):
+        """
+        Iterates over BATCH_SIZE of data
+        returning a list or results
+        """
+        batch = []
+        try:
+            for i in range(BATCH_SIZE):
+                batch.append(data.next())
+        except StopIteration:
+            pass
+
+        return batch
+
