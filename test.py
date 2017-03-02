@@ -53,9 +53,9 @@ class TestOneClickRetail(unittest.TestCase):
         # second call should not return items
         second_call = self.stream.read()
         # first batch should contain all data
-        self.assertequal(first_call, data)
+        self.assertEqual(first_call, data)
         # second batch should be empty
-        self.assertisnone(second_call)
+        self.assertIsNone(second_call)
 
     # Raises exception if response is not a csv
     @patch('ocr.urllib2.urlopen')
@@ -73,7 +73,7 @@ class TestOneClickRetail(unittest.TestCase):
     # Increases process count when processing resources
     @patch('ocr.OcrSource._fetch_resource')
     @patch('ocr.BATCH_SIZE', 3)
-    def test_returns_none_when_done(self, fetch_resources):
+    def test_increases_processed_count(self, fetch_resources):
         self.source['resources'].append(
             {'name': 'another resource', 'value': 'another value'}
         )
