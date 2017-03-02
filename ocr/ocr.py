@@ -86,14 +86,15 @@ class OcrSource(panoply.DataSource):
     def _fetch_resource(self, resource):
         """
         Assemble the api call, execute it and parse the
-        csv response as a list of dicts
+        csv response as a list of dicts. Returns a dict generator
         """
 
         qs = self._build_qs()  # Build the query string
         url = self._build_url(qs)  # Build the full url
         fp = self._api_call(url)  # Fetch the data as a file pointer
-        reader = csv.DictReader(fp)  # Parse the csv file to a dict generator
-        return reader
+
+        # Parse the list of dicts in to a dict generator
+        return csv.DictReader(fp)
 
     def _build_qs(self):
         params = {
