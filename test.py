@@ -44,18 +44,18 @@ class TestOneClickRetail(unittest.TestCase):
 
     # Return none when no more resources are left
     @patch('ocr.OcrSource._fetch_resource')
-    @patch('ocr.ocr.BATCH_SIZE', 3)
+    @patch('ocr.BATCH_SIZE', 3)
     def test_returns_none_when_done(self, fetch_resources):
         data = ['first_data', 'second_data', 'third_data']
         fetch_resources.return_value = iter(data)
-        # First call should return 3 items
+        # first call should return 3 items
         first_call = self.stream.read()
-        # Second call should not return items
+        # second call should not return items
         second_call = self.stream.read()
-        # First batch should contain all data
-        self.assertEqual(first_call, data)
-        # Second batch should be empty
-        self.assertIsNone(second_call)
+        # first batch should contain all data
+        self.assertequal(first_call, data)
+        # second batch should be empty
+        self.assertisnone(second_call)
 
     # Raises exception if response is not a csv
     @patch('ocr.urllib2.urlopen')
@@ -69,6 +69,30 @@ class TestOneClickRetail(unittest.TestCase):
         l = ['v1', 'v2']
         self.stream._extract_batch(iter(l))
         self.assertIsNone(self.stream.resource)
+
+    # Increases process count when processing resources
+    @patch('ocr.OcrSource._fetch_resource')
+    @patch('ocr.BATCH_SIZE', 3)
+    def test_returns_none_when_done(self, fetch_resources):
+        self.source['resources'].append(
+            {'name': 'another resource', 'value': 'another value'}
+        )
+        self.stream = OcrSource(self.source, OPTIONS)
+        data = ['first_data', 'second_data', 'third_data']
+        fetch_resources.return_value = iter(data)
+
+        # Nothing processed at the begining
+        self.assertEqual(self.stream.processed, 0)
+
+        # First read should return all data in one batch
+        self.stream.read()
+        # Processed one resource
+        self.assertEqual(self.stream.processed, 1)
+
+        # Second read should move to next resource
+        self.stream.read()
+        # Processed two resource
+        self.assertEqual(self.stream.processed, 2)
 
 
 # Run the test suite
