@@ -135,7 +135,7 @@ class OcrSource(panoply.DataSource):
         returning a list or results
         """
 
-        batch_size = BATCH_SIZE if batch_size is None else batch_size
+        batch_size = batch_size or BATCH_SIZE
 
         batch = []
         try:
