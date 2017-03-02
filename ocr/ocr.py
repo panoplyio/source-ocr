@@ -49,16 +49,23 @@ class OcrSource(panoply.DataSource):
         self.api_key = source.get('apiKey')
         self.weeks = source.get('weeks', DEFAULT_WEEKS_BACK)
         self.clientUUID = source.get('clientUUID')
+        self.processed = 0
+        self.total = len(self.resources)
 
     def read(self):
         try:
             if not self.resource:
                 self.resource = self.resources.pop()
+                self.processed += 1
         except IndexError:
             # IndexError will occur when attempting to pop and element
             # off an empty list. This indicates that we have already
             # processed all resources.
             return None
+
+        # Send progress message
+        progress_msg = 'Fetching data for %s' % self.resource.get('name')
+        self.progress(self.processed, self.total, progress_msg)
 
         # If data remains from the last resource, use it.
         # Otherwise fetch data from the current resource.
@@ -71,6 +78,7 @@ class OcrSource(panoply.DataSource):
         if not batch:
             # This was the last batch for this resource
             self.resource = None
+            # Attempt to fetch the next resouce
             return self.read()
 
         return batch
@@ -80,9 +88,6 @@ class OcrSource(panoply.DataSource):
         Assemble the api call, execute it and parse the
         csv response as a list of dicts
         """
-
-        progress_msg = 'Fetching data for %s' % resource.get('name')
-        self.progress(None, None, progress_msg)
 
         qs = self._build_qs()  # Build the query string
         url = self._build_url(qs)  # Build the full url
