@@ -50,7 +50,7 @@ class OcrSource(panoply.DataSource):
         self.processed = 0
         self.total = len(self.resources)
 
-    def read(self):
+    def read(self, batch_size=None):
         try:
             if not self.resource:
                 self.resource = self.resources.pop()
@@ -69,7 +69,7 @@ class OcrSource(panoply.DataSource):
         # Otherwise fetch data from the current resource.
         self.data = self.data or self._fetch_resource(self.resource)
 
-        batch = self._extract_batch(self.data)
+        batch = self._extract_batch(self.data, batch_size)
 
         # If no data was returned for this batch we might have reached
         # the end of the source - attempt to read more.
@@ -136,14 +136,17 @@ class OcrSource(panoply.DataSource):
 
         return self.tmp_file
 
-    def _extract_batch(self, data):
+    def _extract_batch(self, data, batch_size):
         """
         Iterates over BATCH_SIZE of data
         returning a list or results
         """
+
+        batch_size = BATCH_SIZE if batch_size is None else batch_size
+
         batch = []
         try:
-            for i in range(BATCH_SIZE):
+            for i in range(batch_size):
                 batch.append(data.next())
         except StopIteration:
             pass

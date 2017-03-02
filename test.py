@@ -67,7 +67,7 @@ class TestOneClickRetail(unittest.TestCase):
     # Sets resource to None once no more batches are left
     def test_extract_batch(self):
         l = ['v1', 'v2']
-        self.stream._extract_batch(iter(l))
+        self.stream._extract_batch(iter(l), None)
         self.assertIsNone(self.stream.resource)
 
     # Increases process count when processing resources
