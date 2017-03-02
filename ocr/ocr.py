@@ -13,7 +13,7 @@ BATCH_SIZE = 200
 FETCH_META = False
 DEFAULT_WEEKS_BACK = 1
 DATE_FORMAT = '%Y-%m-%d'
-MAX_SIZE = 104857600  # 100mb
+MAX_SIZE = 100 * (1024 * 1024)  # 100mb
 
 
 class OcrSource(panoply.DataSource):
