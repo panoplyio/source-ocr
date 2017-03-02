@@ -52,7 +52,9 @@ class TestOneClickRetail(unittest.TestCase):
         first_call = self.stream.read()
         # Second call should not return items
         second_call = self.stream.read()
-        self.assertIsNotNone(first_call)
+        # First batch should contain all data
+        self.assertEqual(first_call, data)
+        # Second batch should be empty
         self.assertIsNone(second_call)
 
     # Raises exception if response is not a csv
