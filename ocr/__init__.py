@@ -13,13 +13,17 @@ CONFIG = {
         {
             'name': 'clientUUID',
             'title': 'Client UUID',
-            'placeholder': 'Provided by OCR API',
+            'placeholder': 'One Click Retail client UUID',
+            'help': 'Your One Click Retail client UUID.'
+                    ' Provided by OCR API',
             'required': True
         },
         {
             'name': 'apiKey',
             'title': 'API Key',
-            'placeholder': 'Provided by OCR API',
+            'placeholder': 'One Click Retail API Key',
+            'help': 'Your One Click Retail API key.'
+                    ' Provided by OCR API',
             'required': True
         },
         {
