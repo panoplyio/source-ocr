@@ -22,15 +22,6 @@ class OcrSource(panoply.DataSource):
     GET /v3/clients/{client_uuid}/reports/csv
     """
 
-    resources = None
-    resource = None
-    tmp_file = None
-    data = []
-
-    api_key = None
-    weeks = None
-    clientUUID = None
-
     def __init__(self, source, options):
         super(OcrSource, self).__init__(source, options)
 
@@ -43,6 +34,8 @@ class OcrSource(panoply.DataSource):
         if not source.get('resources'):
             raise Exception('No resources selected')
 
+        self.resource = None
+        self.data = None
         self.resources = source.get('resources')
         self.api_key = source.get('apiKey')
         self.weeks = source.get('weeks', DEFAULT_WEEKS_BACK)
