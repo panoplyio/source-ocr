@@ -37,10 +37,10 @@ class OcrSource(panoply.DataSource):
         super(OcrSource, self).__init__(source, options)
 
         if not source.get('destination'):
-                source['destination'] = DESTINATION
+            source['destination'] = DESTINATION
 
         if not source.get('idpattern'):
-                source['idpattern'] = IDPATTERN
+            source['idpattern'] = IDPATTERN
 
         if not source.get('resources'):
             raise Exception('No resources selected')
