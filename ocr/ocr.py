@@ -2,7 +2,6 @@ import urllib
 import urllib2
 import csv
 from tempfile import SpooledTemporaryFile
-from datetime import datetime, date
 import panoply
 
 
@@ -12,7 +11,6 @@ IDPATTERN = '{week_asin}'
 BATCH_SIZE = 200
 FETCH_META = False
 DEFAULT_WEEKS_BACK = 1
-DATE_FORMAT = '%Y-%m-%d'
 MAX_SIZE = 100 * (1024 * 1024)  # 100mb
 
 
@@ -151,4 +149,3 @@ class OcrSource(panoply.DataSource):
             pass
 
         return batch
-
