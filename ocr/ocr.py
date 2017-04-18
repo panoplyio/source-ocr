@@ -60,7 +60,7 @@ class OcrSource(panoply.DataSource):
 
         # If data remains from the last resource, use it.
         # Otherwise fetch data from the current resource.
-        self.data = self.data or self._fetch_resource(self.resource)
+        self.data = self.data or self._fetch_resource()
 
         batch = self._extract_batch(self.data, batch_size)
 
@@ -74,7 +74,7 @@ class OcrSource(panoply.DataSource):
 
         return batch
 
-    def _fetch_resource(self, resource):
+    def _fetch_resource(self):
         """
         Assemble the api call, execute it and parse the
         csv response as a list of dicts. Returns a dict generator
