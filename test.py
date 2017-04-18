@@ -1,5 +1,5 @@
 import unittest
-from mock import patch
+from mock import patch, Mock
 from ocr import (
     OcrSource,
     IDPATTERN,
@@ -63,6 +63,26 @@ class TestOneClickRetail(unittest.TestCase):
         err = 'ERROR - Non CSV response'
         with self.assertRaisesRegexp(Exception, err):
             self.stream._api_call(None)
+
+    # Handles unencodable strings
+    @patch('ocr.urllib2.urlopen')
+    def test_hanldes_unencodable_strings(self, mock_urlopen):
+        res_mock = Mock()
+        res_mock.info.side_effect = self.foo
+        # The characters here represent a copywrite symbol
+        res_mock.read.side_effect = lambda: "{'problem_text': 'OHNO!\xc2\xae'}"
+        mock_urlopen.return_value = res_mock
+
+        exception_raised = False
+        try:
+            self.stream.read()
+        except Exception, e:
+            exception_raised = e
+
+        self.assertFalse(exception_raised, exception_raised)
+
+    def foo(self):
+        return {'content-type': 'csv'}
 
     # Sets resource to None once no more batches are left
     def test_extract_batch(self):

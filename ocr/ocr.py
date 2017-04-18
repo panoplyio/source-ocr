@@ -114,15 +114,27 @@ class OcrSource(panoply.DataSource):
         large of a file the api will return.
         We are expecting a csv file.
         """
+        self.log('Request URL', url)
         response = urllib2.urlopen(url)
+        self.log('Got response', response)
 
         # the response MUST be a csv file
         content_type = response.info().get('content-type')
         if 'csv' not in content_type:
             raise Exception('ERROR - Non CSV response.')
 
+        raw_data = response.read()
+        # Decode the returned data and replace any characters that generate
+        # encoding errors with the default unicode replacement character.
+        data = raw_data.decode('utf-8', 'replace')
+
         self.tmp_file = SpooledTemporaryFile(max_size=MAX_SIZE)
-        self.tmp_file.write(response.read())
+        # Force writing the data encoded as utf-8. If we don't do this,
+        # python will attempt to write the data as 'ascii' which does not
+        # support special characters
+
+        self.tmp_file.write(data.encode('utf-8'))
+
         # 'rewind' the file pointer in order to
         # read it back durring `_extract_batch()`
         self.tmp_file.seek(0)
