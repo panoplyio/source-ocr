@@ -68,7 +68,7 @@ class TestOneClickRetail(unittest.TestCase):
     @patch('ocr.urllib2.urlopen')
     def test_hanldes_unencodable_strings(self, mock_urlopen):
         res_mock = Mock()
-        res_mock.info.side_effect = self.foo
+        res_mock.info.side_effect = lambda: {'content-type': 'csv'}
         # The characters here represent a copywrite symbol
         res_mock.read.side_effect = lambda: "{'problem_text': 'OHNO!\xc2\xae'}"
         mock_urlopen.return_value = res_mock
@@ -80,9 +80,6 @@ class TestOneClickRetail(unittest.TestCase):
             exception_raised = e
 
         self.assertFalse(exception_raised, exception_raised)
-
-    def foo(self):
-        return {'content-type': 'csv'}
 
     # Sets resource to None once no more batches are left
     def test_extract_batch(self):
