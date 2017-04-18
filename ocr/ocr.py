@@ -123,10 +123,9 @@ class OcrSource(panoply.DataSource):
         if 'csv' not in content_type:
             raise Exception('ERROR - Non CSV response.')
 
-        raw_data = response.read()
         # Decode the returned data and replace any characters that generate
         # encoding errors with the default unicode replacement character.
-        data = raw_data.decode('utf-8', 'replace')
+        data = response.read().decode('utf-8', 'replace')
 
         self.tmp_file = SpooledTemporaryFile(max_size=MAX_SIZE)
         # Force writing the data encoded as utf-8. If we don't do this,
