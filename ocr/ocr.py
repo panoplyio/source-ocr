@@ -60,7 +60,7 @@ class OcrSource(panoply.DataSource):
 
         # If data remains from the last resource, use it.
         # Otherwise fetch data from the current resource.
-        self.data = self.data or self._fetch_resource(self.resource)
+        self.data = self.data or self._fetch_resource()
 
         batch = self._extract_batch(self.data, batch_size)
 
@@ -74,7 +74,7 @@ class OcrSource(panoply.DataSource):
 
         return batch
 
-    def _fetch_resource(self, resource):
+    def _fetch_resource(self):
         """
         Assemble the api call, execute it and parse the
         csv response as a list of dicts. Returns a dict generator
@@ -114,6 +114,7 @@ class OcrSource(panoply.DataSource):
         large of a file the api will return.
         We are expecting a csv file.
         """
+        self.log('Request URL', url)
         response = urllib2.urlopen(url)
 
         # the response MUST be a csv file
@@ -121,8 +122,17 @@ class OcrSource(panoply.DataSource):
         if 'csv' not in content_type:
             raise Exception('ERROR - Non CSV response.')
 
+        # Decode the returned data and replace any characters that generate
+        # encoding errors with the default unicode replacement character.
+        data = response.read().decode('utf-8', 'replace')
+
         self.tmp_file = SpooledTemporaryFile(max_size=MAX_SIZE)
-        self.tmp_file.write(response.read())
+        # Force writing the data encoded as utf-8. If we don't do this,
+        # python will attempt to write the data as 'ascii' which does not
+        # support special characters
+
+        self.tmp_file.write(data.encode('utf-8'))
+
         # 'rewind' the file pointer in order to
         # read it back durring `_extract_batch()`
         self.tmp_file.seek(0)

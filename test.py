@@ -1,5 +1,6 @@
+# -*- coding: utf-8 -*-
 import unittest
-from mock import patch
+from mock import patch, Mock
 from ocr import (
     OcrSource,
     IDPATTERN,
@@ -64,6 +65,23 @@ class TestOneClickRetail(unittest.TestCase):
         with self.assertRaisesRegexp(Exception, err):
             self.stream._api_call(None)
 
+    # Handles unencodable strings
+    @patch('ocr.urllib2.urlopen')
+    def test_hanldes_unencodable_strings(self, mock_urlopen):
+        res_mock = Mock()
+        res_mock.info.side_effect = lambda: {'content-type': 'csv'}
+        res_mock.read.side_effect = lambda: mock_csv_data()
+        mock_urlopen.return_value = res_mock
+
+        data = self.stream.read()
+        first_val = data[0]['val']
+        second_val = data[1]['val']
+        # First value is correctly displayed as a copywrite symbol
+        self.assertEqual(first_val, '®')
+        # Second value is not valid, so it should be replaced
+        # with the default REPLACEMENT CHARACTER
+        self.assertEqual(second_val, '�')
+
     # Sets resource to None once no more batches are left
     def test_extract_batch(self):
         l = ['v1', 'v2']
@@ -93,6 +111,17 @@ class TestOneClickRetail(unittest.TestCase):
         self.stream.read()
         # Processed two resource
         self.assertEqual(self.stream.processed, 2)
+
+
+def mock_csv_data():
+    return 'title,val\n1st,\xc2\xae\n2nd,\xae'
+
+
+def mock_json_data():
+    return [
+        {'title': '1st', 'val': '\xc2\xae'},
+        {'title': '2nd', 'val': '\xae'}
+    ]
 
 
 # Run the test suite
