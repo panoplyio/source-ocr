@@ -116,7 +116,6 @@ class OcrSource(panoply.DataSource):
         """
         self.log('Request URL', url)
         response = urllib2.urlopen(url)
-        self.log('Got response', response)
 
         # the response MUST be a csv file
         content_type = response.info().get('content-type')
