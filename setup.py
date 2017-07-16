@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name='panoply_ocr',
-    version='1.0.0',
+    version='2.0.0',
     description='Panoply Data Source for One Click Retail',
     author='Lior Rozen',
     author_email='lior@panoply.io',
