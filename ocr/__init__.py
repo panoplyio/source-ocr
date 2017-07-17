@@ -3,7 +3,7 @@ from ocr import *
 Stream = OcrSource
 
 resource_values = [
-    {'name': 'reports csv', 'value': 'v3/clients/%s/reports/csv'}
+    {'name': 'reports csv', 'value': 'v5/clients/%s/reports/export'}
 ]
 
 CONFIG = {
@@ -33,6 +33,11 @@ CONFIG = {
             'values': resource_values,
             'dependencies': ['clientUUID', 'apiKey'],
             'required': True
+        },
+        {
+            'name': 'filterId',
+            'title': 'Filter ID',
+            'dependencies': ['clientUUID', 'apiKey']
         }
     ],
     'categories': ['APIS'],

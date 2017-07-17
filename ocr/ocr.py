@@ -19,7 +19,7 @@ class OcrSource(panoply.DataSource):
     One Click Retail data source.
     API Docs (require login) - https://api.oneclickretail.com/api-docs-login
     Implemented endpoints -
-    GET /v3/clients/{client_uuid}/reports/csv
+    GET /v5/clients/{client_uuid}/reports/export?format=csv
     """
 
     def __init__(self, source, options):
@@ -89,10 +89,14 @@ class OcrSource(panoply.DataSource):
 
     def _build_qs(self):
         params = {
+            'format': 'csv',
             'meta': FETCH_META,
             'X-API-KEY': self.api_key,
             'weeks_back': self.weeks
         }
+
+        if self.source.get('filterId'):
+            params['filter_id'] = self.source['filterId']
 
         qs = urllib.urlencode(params)
         return qs
