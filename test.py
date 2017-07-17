@@ -24,7 +24,10 @@ class TestOneClickRetail(unittest.TestCase):
             'apiKey': 'testKey',
             'weeks': 1,
             'resources': [
-                {'name': 'reports csv', 'value': 'v5/clients/%s/reports/export'}
+                {
+                    'name': 'reports csv',
+                    'value': 'v5/clients/%s/reports/export'
+                }
             ]
         }
         self.stream = OcrSource(self.source, OPTIONS)
