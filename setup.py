@@ -11,7 +11,7 @@ setup(
         'panoply-python-sdk==1.3.2'
     ],
     extras_require={
-        'test": [
+        'test': [
             'pep8==1.7.0',
             'coverage==4.3.4',
             'mock==2.0.0'
