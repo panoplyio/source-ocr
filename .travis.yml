@@ -7,9 +7,7 @@ branches:
    - master
 
 install:
- - pip install pep8
- - pip install coverage
- - pip install .
+ - pip install -e .[test]
 
 # Each step below must succeed for the build to pass
 script:
